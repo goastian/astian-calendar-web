@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('calendars', function (Blueprint $table) {
             $table->uuid('id')->unique();
-            $table->string('email');
-            $table->string('name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('status')->nullable();
+            $table->string('title');
+            $table->longText('body')->nullable();
+            $table->string('resource')->nullable();
+            $table->string('banner')->nullable();
+            $table->boolean('public')->default(0);
+            $table->dateTime('meeting');
+            $table->uuid('user_id');
             $table->timestamps();
-            $table->uuid('calendar_id');
             $table->primary('id');
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('calendars');
     }
 };

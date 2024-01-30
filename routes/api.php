@@ -1,19 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Calendar\CalendarController;
+use App\Http\Controllers\Calendar\CalendarUserController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::resource('calendars', CalendarController::class)->except('create', 'edit');
+Route::resource('calendars.users', CalendarUserController::class)->except('edit', 'create');
