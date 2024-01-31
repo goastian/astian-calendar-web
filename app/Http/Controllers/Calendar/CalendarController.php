@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Calendar;
 
+use App\Events\DestroyCalendarEvent;
+use App\Events\StoreCalendarEvent;
+use App\Events\UpdateCalendarEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Calendar;
 use App\Transformers\CalendarTransformer;
@@ -56,6 +59,8 @@ class CalendarController extends Controller
             $calendar->user_id = $this->auth_id;
             $calendar->save();
         });
+
+        StoreCalendarEvent::dispatch();
 
         return $this->showOne($calendar, $calendar->transformer, 201);
     }
@@ -125,6 +130,9 @@ class CalendarController extends Controller
             }
 
             if ($changed) {
+                
+                UpdateCalendarEvent::dispatch();
+
                 $calendar->push();
             }
         });
@@ -144,6 +152,8 @@ class CalendarController extends Controller
 
         $calendar->delete();
 
+        DestroyCalendarEvent::dispatch();
+        
         return $this->showOne($calendar, $calendar->transformer);
     }
 }
