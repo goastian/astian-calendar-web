@@ -8,9 +8,16 @@ use App\Events\UpdateUserEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Calendar;
 use App\Models\User;
+use App\Notifications\ShareCalendar;
 use App\Transformers\UserTransformer;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class CalendarUserController extends Controller
 {
@@ -29,6 +36,9 @@ class CalendarUserController extends Controller
      */
     public function index(Calendar $calendar)
     {
+        throw_unless($calendar->user_id == $this->user()->id,
+            new ReportError(Lang::get('No cuenta con los permisos para realizar esta operacion'), 403));
+
         $users = $calendar->users()->get();
 
         return $this->showAll($users, UserTransformer::class);
@@ -42,19 +52,30 @@ class CalendarUserController extends Controller
      */
     public function store(Request $request, Calendar $calendar, User $user)
     {
+        if ($calendar->users()->get()->contains('email', '=', $request->email)) {
+            throw new ReportError(Lang::get('Este email ya ha sido registrado.'), 422);
+        }
+
+        throw_unless($calendar->user_id == $this->user()->id,
+            new ReportError(Lang::get('No cuenta con los permisos para realizar esta operacion'), 403));
+
         $this->validate($request, [
             'email' => ['required', 'email'],
-            'name' => ['nullable', 'max:100'],
-            'last_name' => ['nullable', 'max:100'],
+            'name' => ['required', 'max:100'],
+            'last_name' => ['required', 'max:100'],
         ]);
 
         DB::transaction(function () use ($request, $calendar, $user) {
             $user = $user->fill($request->only('email', 'name', 'last_name'));
             $user->calendar_id = $calendar->id;
+            $user->token = Str::random(100); 
+            $user->code = Hash::make($code = $this->generateUniqueCode());
             $user->save();
-        });
 
-        StoreUserEvent::dispatch();
+            Notification::send($user, new ShareCalendar($code, $calendar));
+
+            StoreUserEvent::dispatch();
+        });
 
         return $this->showOne($user, UserTransformer::class, 201);
     }
@@ -67,6 +88,9 @@ class CalendarUserController extends Controller
      */
     public function show(Calendar $calendar, User $user)
     {
+        throw_unless($calendar->user_id == $this->user()->id,
+            new ReportError(Lang::get('No cuenta con los permisos para realizar esta operacion'), 403));
+
         return $this->showOne($user, UserTransformer::class);
     }
 
@@ -79,6 +103,9 @@ class CalendarUserController extends Controller
      */
     public function update(Request $request, Calendar $calendar, User $user)
     {
+        throw_unless($calendar->user_id == $this->user()->id,
+            new ReportError(Lang::get('No cuenta con los permisos para realizar esta operacion'), 403));
+
         $this->validate($request, [
             'email' => ['nullable', 'email'],
             'name' => ['nullable', 'max:100'],
@@ -121,10 +148,13 @@ class CalendarUserController extends Controller
      */
     public function destroy(Calendar $calendar, User $user)
     {
+        throw_unless($calendar->user_id == $this->user()->id,
+            new ReportError(Lang::get('No cuenta con los permisos para realizar esta operacion'), 403));
+
         $user->delete();
 
         DestroyUserEvent::dispatch();
-    
+
         return $this->showOne($user, UserTransformer::class);
     }
 }

@@ -8,9 +8,12 @@ use App\Events\UpdateCalendarEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Calendar;
 use App\Transformers\CalendarTransformer;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
+use Stevebauman\Purify\Facades\Purify;
 
 class CalendarController extends Controller
 {
@@ -30,7 +33,7 @@ class CalendarController extends Controller
     {
         $params = $this->filter_transform($calendar->transformer);
 
-        $data = $this->search($calendar->table, $params);
+        $data = $this->search($calendar->table, $params, 'user_id', $this->user()->id);
 
         return $this->showAll($data, $calendar->transformer);
     }
@@ -45,18 +48,18 @@ class CalendarController extends Controller
     {
         $this->validate($request, [
             'title' => ['required', 'max:100'],
-            'body' => ['requerido', 'max:1000'],
+            'body' => ['required', 'max:1000'],
             'meeting' => ['required', 'date_format:Y-m-d H:i'],
             'resource' => ['nullable', 'url:https'],
-            'banner' => ['nullable', 'file', 'image', 'mimes:jpg,png,svg'],
+            //'banner' => ['nullable', 'file', 'image', 'mimes:jpg,png,svg'],
             'public' => ['nullable', 'boolean'],
         ]);
 
         DB::transaction(function () use ($request, $calendar) {
-            $calendar = $calendar->fill($request->except('banner'));
-
-            $calendar->banner = $request->banner ? Storage::disk('banners')->put('', $request->banner) : null;
-            $calendar->user_id = $this->auth_id;
+            $calendar = $calendar->fill($request->except('body'));
+            $calendar->body = Purify::clean($request->body);
+            //$calendar->banner = $request->banner ? Storage::disk('banners')->put('', $request->banner) : null;
+            $calendar->user_id = $this->user()->id;
             $calendar->save();
         });
 
@@ -73,6 +76,9 @@ class CalendarController extends Controller
      */
     public function show(Calendar $calendar)
     {
+        throw_unless($calendar->user_id == $this->user()->id,
+            new ReportError(Lang::get('Unauthorize user'), 403));
+
         return $this->showOne($calendar, $calendar->transformer);
     }
 
@@ -85,11 +91,14 @@ class CalendarController extends Controller
      */
     public function update(Request $request, Calendar $calendar)
     {
+        throw_unless($calendar->user_id == $this->user()->id,
+            new ReportError(Lang::get('Unauthorize user'), 403));
+
         $this->validate($request, [
             'title' => ['nullable', 'max:100'],
             'body' => ['nullable', 'max:1000'],
             'resource' => ['nullable', 'url:https'],
-            'banner' => ['nullable', 'file', 'image', 'mimes:jpg,png,svg'],
+            //'banner' => ['nullable', 'file', 'image', 'mimes:jpg,png,svg'],
             'meeting' => ['nullable', 'date_format:Y-m-d H:i'],
             'public' => ['nullable', 'boolean'],
         ]);
@@ -113,11 +122,11 @@ class CalendarController extends Controller
                 $changed = true;
             }
 
-            if ($request->banner) {
-                Storage::disk('banners')->delete($calendar->banner);
-                $calendar->resource = Storage::disk('banners')->put('', $request->banner);
-                $changed = true;
-            }
+            /* if ($request->banner) {
+            Storage::disk('banners')->delete($calendar->banner);
+            $calendar->resource = Storage::disk('banners')->put('', $request->banner);
+            $changed = true;
+            }*/
 
             if ($this->is_diferent($calendar->meeting, $request->meeting)) {
                 $calendar->meeting = $request->meeting;
@@ -130,7 +139,7 @@ class CalendarController extends Controller
             }
 
             if ($changed) {
-                
+
                 UpdateCalendarEvent::dispatch();
 
                 $calendar->push();
@@ -148,12 +157,15 @@ class CalendarController extends Controller
      */
     public function destroy(Calendar $calendar)
     {
+        throw_unless($calendar->user_id == $this->user()->id,
+            new ReportError(Lang::get('Unauthorize user'), 403));
+
         Storage::disk('banners')->delete($calendar->banner);
 
         $calendar->delete();
 
         DestroyCalendarEvent::dispatch();
-        
+
         return $this->showOne($calendar, $calendar->transformer);
     }
 }

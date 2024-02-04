@@ -63,6 +63,10 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+		'server' => \Elyerr\Passport\Connect\Middleware\Authorization::class,
+		'scope' => \Elyerr\Passport\Connect\Middleware\CheckForAnyScope::class,
+		'scopes' => \Elyerr\Passport\Connect\Middleware\CheckScopes::class,
+		'client' => \Elyerr\Passport\Connect\Middleware\CheckClientCredentials::class,
 		'transform.request' => \Elyerr\ApiResponse\Middleware\TransformRequest::class,
     ];
 }

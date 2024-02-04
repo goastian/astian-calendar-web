@@ -2,10 +2,13 @@
 
 namespace App\Transformers;
 
+use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class UserTransformer extends TransformerAbstract
 {
+    use Asset;
+
     /**
      * List of resources to automatically include
      *
@@ -37,8 +40,8 @@ class UserTransformer extends TransformerAbstract
             'nombre' => $user->name,
             'apellido' => $user->last_name,
             'estado' => $user->stado,
-            'creado' => $user->created_at,
-            'actualizado' => $user->updated_at,
+            'creado' => $this->format_date($user->created_at),
+            'actualizado' => $this->format_date($user->updated_at),
             'links' => [
                 'parent' => route('calendars.users.index', ['calendar' => $user->calendar_id]),
                 'store' => route('calendars.users.store', ['calendar' => $user->calendar_id]),

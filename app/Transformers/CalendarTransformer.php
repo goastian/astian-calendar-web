@@ -2,10 +2,14 @@
 
 namespace App\Transformers;
 
+use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class CalendarTransformer extends TransformerAbstract
 {
+
+    use Asset;
+
     /**
      * List of resources to automatically include
      *
@@ -36,11 +40,11 @@ class CalendarTransformer extends TransformerAbstract
             'titulo' => $calendar->title,
             'cuerpo' => $calendar->body,
             'link' => $calendar->resource,
-            'imagen' => $calendar->banner ? config('app.url') . "/storage/banners/" . $calendar->banner : null,
+           // 'imagen' => $calendar->banner ? config('app.url') . "/storage/banners/" . $calendar->banner : null,
             'reunion' => $calendar->meeting,
             'publico' => $calendar->public,
-            'creado' => $calendar->created_at,
-            'actualizado' => $calendar->created_at,
+            'creado' => $this->format_date($calendar->created_at),
+            'actualizado' => $this->format_date($calendar->created_at), 
             'links' => [
                 'parent' => route('calendars.index'),
                 'store' => route('calendars.store'),

@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('title');
             $table->longText('body')->nullable();
             $table->string('resource')->nullable();
-            $table->string('banner')->nullable();
             $table->boolean('public')->default(0);
             $table->dateTime('meeting');
             $table->uuid('user_id');
             $table->timestamps();
+            $table->softDeletes();
             $table->primary('id');
         });
     }

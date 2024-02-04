@@ -1,2 +1,13 @@
 @import 'bootstrap/scss/bootstrap';
+@import "bootstrap-icons";
 @import '__colors';
+
+
+.hide {
+    display: none;
+}
+
+.error {
+    color: rgb(187, 27, 27);
+    font-size: 12px;
+}

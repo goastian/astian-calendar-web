@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('status')->nullable();
+            $table->string('token');
+            $table->string('code');
             $table->timestamps();
             $table->uuid('calendar_id');
             $table->primary('id');
