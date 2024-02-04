@@ -14,13 +14,19 @@ class DestroyCalendarEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
+     * identificador unico del evento
+     * @var Strong
+     */
+    public $socket;
+
+    /**
      * Create a new event instance.
      *
      * @return void
      */
     public function __construct()
     {
-
+        $this->socket = uniqid();
     }
 
     /**

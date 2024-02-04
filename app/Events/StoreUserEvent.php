@@ -13,6 +13,12 @@ class StoreUserEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+   /**
+     * identificador unico del evento
+     * @var Strong
+     */
+    public $socket;
+
     /**
      * Create a new event instance.
      *
@@ -20,7 +26,7 @@ class StoreUserEvent implements ShouldBroadcast
      */
     public function __construct()
     {
-
+        $this->socket = uniqid();
     }
 
     /**

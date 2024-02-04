@@ -4,17 +4,21 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels; 
-
+use Illuminate\Queue\SerializesModels;
 
 class UpdateUserEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
- 
+
+    /**
+     * identificador unico del evento
+     * @var Strong
+     */
+    public $socket;
+
     /**
      * Create a new event instance.
      *
@@ -22,6 +26,7 @@ class UpdateUserEvent implements ShouldBroadcast
      */
     public function __construct()
     {
+        $this->socket = uniqid();
     }
 
     /**
@@ -31,10 +36,10 @@ class UpdateUserEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel(env('CHANNEL_NAME','test'));
+        return new PrivateChannel(env('CHANNEL_NAME', 'test'));
     }
 
-     /**
+    /**
      * The event's broadcast name.
      *
      * @return string
