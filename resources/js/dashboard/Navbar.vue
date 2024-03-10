@@ -1,35 +1,42 @@
 <template>
     <ul class="nav">
+        <li class="nav-item" @click="Expand(status)">
+            <a href="#" class="btn">
+                <span class="mx-2">
+                    {{ app_name }}
+                </span>
+
+                <i class="bi bi-list h5"></i
+            ></a>
+        </li>
         <li class="nav-item ms-auto">
             <v-apps></v-apps>
         </li>
 
         <li class="nav-item dropdown">
             <a
-                class="btn btn-primary dropdown-toggle"
+                class="btn dropdown-toggle"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
+                aria-expanded="true"
             >
                 <i class="bi bi-bell-fill h5" @click="unreadNotification"></i>
-                <span
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                >
+                <span class="position-absolute badge rounded-pill bg-danger">
                     {{ unread_notifications.length }}
-                    <span class="visually-hidden">unread messages</span>
+                    <span class="visually-hidden">Unread messages</span>
                 </span>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-notify">
+            <ul class="dropdown-menu expand">
                 <li class="dropdown-item h5">
-                    <router-link :to="{ name: 'notify.unread' }">
-                        Ver todas
+                    <a :href="host + '/notifications/unread'">
+                        Notifications
                         <span class="badge text-bg-danger">{{
                             unread_notifications.length
                         }}</span>
-                    </router-link>
+                    </a>
                 </li>
                 <li class="dropdown-divider"></li>
                 <li
-                    class="dropdown-item"
+                    class="dropdown-item p-0"
                     v-for="(item, index) in unread_notifications"
                     :key="index"
                 >
@@ -47,25 +54,33 @@
                                 ]"
                             ></i>
                         </strong>
-                        <p>
-                            {{ item.mensaje }}
-                        </p>
                     </a>
                 </li>
             </ul>
         </li>
 
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown icon">
             <a
-                class="btn btn-primary dropdown-toggle"
+                class="btn dropdown-toggle"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
+                aria-expanded="true"
             >
-                <i class="bi bi-box-arrow-in-right h3"></i>
+                {{ user.nombre }}
+                <i class="bi bi-box-arrow-in-right h4 m-0"></i>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-                <li>
-                    <a class="dropdown-item" href="#" @click="logout">Logout</a>
+            <ul class="dropdown-menu expand bg-light">
+                <li class="dropdown-item">
+                    <a :href="host"
+                        ><i class="bi bi-house-lock mx-1"></i>
+                        My Account
+                    </a>
+                </li>
+                <li class="dropdown-divider"></li>
+                <li class="dropdown-item">
+                    <a @click="logout" href="#">
+                        <i class="bi bi-lock-fill mx-1"></i>
+                        Logout
+                    </a>
                 </li>
             </ul>
         </li>
@@ -88,14 +103,16 @@ export default {
             expand: false,
             notifications: {},
             unread_notifications: {},
+            host: process.env.MIX_APP_SERVER,
+            app_name: process.env.MIX_APP_NAME,
+            user: {},
         };
     },
 
     mounted() {
         window.addEventListener("resize", this.screenIsChanging);
         this.screenIsChanging();
-        this.notification();
-        this.unreadNotification();
+        this.auth();
         this.listenEvents();
     },
 
@@ -109,14 +126,31 @@ export default {
             this.expand = window.innerWidth < 940;
         },
 
-        logout() {
+        auth() {
             this.$server
-                .post("logout")
+                .get("/api/gateway/user")
                 .then((res) => {
-                    window.location.href = process.env.APP_URL;
+                    this.user = res.data;
+                    this.notification();
+                    this.unreadNotification();
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response && err.response.status == 401) {
+                        this.$router.push({ name: "login" });
+                    }
+                });
+        },
+
+        logout() {
+            this.$server
+                .post("api/gateway/logout")
+                .then((res) => {
+                    this.$router.push({ name: "login" });
+                })
+                .catch((err) => {
+                    if (err.response && err.response.status == 401) {
+                        this.$router.push({ name: "login" });
+                    }
                 });
         },
 
@@ -127,7 +161,9 @@ export default {
                     this.notifications = res.data.data;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response && err.response.status == 401) {
+                        this.$router.push({ name: "login" });
+                    }
                 });
         },
 
@@ -138,7 +174,9 @@ export default {
                     this.unread_notifications = res.data.data;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response && err.response.status == 401) {
+                        this.$router.push({ name: "login" });
+                    }
                 });
         },
 
@@ -149,7 +187,9 @@ export default {
                     this.notification();
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response && err.response.status == 401) {
+                        this.$router.push({ name: "login" });
+                    }
                 });
         },
 
@@ -178,3 +218,38 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+.nav {
+    background-color: inherit;
+    color: inherit;
+}
+
+.expand {
+    padding: 5% 30% 7% 0% !important;
+}
+.dropdown-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.dropdown-item a:hover {
+    text-decoration: dotted !important;
+    color: var(--nav-top-hover-color) !important;
+}
+
+.nav-item {
+    color: inherit;
+    @media (min-width: 240px) {
+        margin-top: 0%;
+    }
+
+    @media (min-width: 240px) {
+        margin-right: 2%;
+    }
+}
+
+.dropdown-item img {
+    width: 15%;
+}
+</style>

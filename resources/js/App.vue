@@ -1,14 +1,24 @@
 <template>
-    <div class="container">
-        <v-nav></v-nav>
+    <div class="content">
+        <router-view></router-view>
     </div>
+    <v-footer></v-footer>
 </template>
 <script>
-import VNav from "./Dashboad/Navbar.vue";
+import VHome from "./dashboard/Index.vue";
+import VFooter from "./dashboard/Footer.vue";
 
 export default {
     components: {
-        VNav,
+        VHome,
+        VFooter,
     },
 };
 </script>
+<style lang="scss">
+.content {
+    flex: 1;
+    margin: 0;
+    padding: 0;
+}
+</style>
