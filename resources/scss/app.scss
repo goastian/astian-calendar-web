@@ -23,17 +23,24 @@
     --footer-bg: #5cb659;
     --footer-color: #fff;
     --footer-hover: #3ee7cb;
-    --nav-top-bg: #e36159;
-    --nav-top-color: #464040;
-    --nav-top-hover-color: #f5ebeb;
-    --nav-left-bg: #fdf8f8;
+    --nav-top-bg: #569ca4;
+    --nav-top-color: #f0e9e9;
+    --nav-top-hover-color: #51699c;
+    --nav-left-bg: #312e2e;
     --nav-left-color: #222121;
     --nav-left-hover-color: #693838;
     --apps-title: #fff;
-    --apps-bg: #44bba7c2;
-    --app-color: #f8f6f6;
-    --apps-hover-color: #333236;
+    --apps-bg: #4370aa;
+    --app-color: #f7eded;
+    --apps-hover-color: #2b2828;
+    --apps-menu-bg: #fff;
+    --apps-menu-color: #524949;
     --apps-shadow-color: #8f6868;
+    --calendar-bg: #8d8dd6;
+    --calendar-color: #faf7f7;
+    --calendar-hover-color: #c7d0d1;
+    --calendar-hover-bg: #0e0e0e;
+    --calendar-border-color: #f8fbfc;
 }
 
 html,
@@ -43,7 +50,7 @@ body {
 }
 
 body {
-    background-image: url("https://cloud.astian.org/build/assets/auth-bg-8529ec0e.svg");
+    //   background-image: url("https://cloud.astian.org/build/assets/auth-bg-8529ec0e.svg");
     background-size: auto;
 }
 
@@ -109,4 +116,79 @@ body {
     font-size: 3em;
 }
 
+.lighter {
+    font-weight: lighter;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.bolder {
+    font-weight: bolder;
+}
+
+.devider {
+    width: 100%;
+    border-bottom: 1px solid;
+    margin: 1%;
+}
+
+
+.mw-1 {
+    max-width: 50%;
+    min-width: 10%;
+}
+
+.mw-15 {
+    max-width: 50%;
+    min-width: 15%;
+}
+
+.mw-2 {
+    max-width: 50%;
+    min-width: 20%;
+}
+
+.mw-25 {
+    max-width: 50%;
+    min-width: 25%;
+}
+
+.mw-3 {
+    max-width: 50%;
+    min-width: 30%;
+}
+
+.mw-35 {
+    max-width: 50%;
+    min-width: 35%;
+}
+
+.mw-4 {
+    max-width: 50%;
+    min-width: 40%;
+}
+
+.mw-45 {
+    max-width: 50%;
+    min-width: 45%;
+}
+
+.mw-5 {
+    max-width: 60%;
+    min-width: 50%;
+}
+
+.mw-55 {
+    max-width: 60%;
+    min-width: 55%;
+}
+
 /***************background*********************/
+.nav-top {
+    background-color: var(--nav-top-bg);
+    color: var(--nav-top-color);
+    padding: 0%;
+    margin: 0%;
+}
