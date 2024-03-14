@@ -37,14 +37,15 @@ class CalendarTransformer extends TransformerAbstract
     {
         return [
             'id' => $calendar->id,
-            'titulo' => $calendar->title,
-            'cuerpo' => $calendar->body,
+            'subject' => $calendar->title,
+            'body' => $calendar->body,
+            'start' => $calendar->start,
+            'end' => $calendar->end,
             'link' => $calendar->resource,
-           // 'imagen' => $calendar->banner ? config('app.url') . "/storage/banners/" . $calendar->banner : null,
-            'reunion' => $calendar->meeting,
-            'publico' => $calendar->public,
+            'meeting' => $calendar->meeting,
+            'public' => $calendar->public,
             'creado' => $this->format_date($calendar->created_at),
-            'actualizado' => $this->format_date($calendar->created_at), 
+            'actualizado' => $this->format_date($calendar->created_at),
             'links' => [
                 'parent' => route('calendars.index'),
                 'store' => route('calendars.store'),
@@ -59,12 +60,13 @@ class CalendarTransformer extends TransformerAbstract
     public static function transformRequest($index)
     {
         $attribute = [
-            'titulo' => 'title',
-            'cuerpo' => 'body',
+            'subject' => 'title',
+            'body' => 'body',
+            'start' => 'start',
+            'end' => 'end',
             'link' => 'resource',
-            'imagen' => 'banner',
-            'reunion' => 'meeting',
-            'publico' => 'public',
+            'meeting' => 'meeting',
+            'public' => 'public',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -73,12 +75,13 @@ class CalendarTransformer extends TransformerAbstract
     public static function transformResponse($index)
     {
         $attribute = [
-            'title' => 'titulo',
-            'body' => 'cuerpo',
+            'title' => 'subject',
+            'body' => 'body',
+            'start' => 'start',
+            'end' => 'end',
             'resource' => 'link',
-            'banner' => 'imagen',
-            'meeting' => 'reunion',
-            'public' => 'publico',
+            'meeting' => 'meeting',
+            'public' => 'public',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -88,14 +91,15 @@ class CalendarTransformer extends TransformerAbstract
     {
         $attributes = [
             'id' => 'id',
-            'titulo' => 'title',
-            'cuerpo' => 'body',
+            'subject' => 'title',
+            'body' => 'body',
+            'start' => 'start',
+            'end' => 'end',
             'link' => 'resource',
-            'imagen' => 'banner',
-            'reunion' => 'meeting',
-            'publico' => 'public',
-            'created_at' => 'creado',
-            'updated_at' => 'actualizado',
+            'meeting' => 'meeting',
+            'public' => 'public',
+            'created_at' => 'created',
+            'updated_at' => 'updated',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('calendars', function (Blueprint $table) {
             $table->uuid('id')->unique();
             $table->string('title');
+            $table->dateTime('start');
+            $table->dateTime('end');
+            $table->dateTime('meeting');
             $table->longText('body')->nullable();
             $table->string('resource')->nullable();
             $table->boolean('public')->default(0);
-            $table->dateTime('meeting');
             $table->uuid('user_id');
             $table->timestamps();
             $table->softDeletes();

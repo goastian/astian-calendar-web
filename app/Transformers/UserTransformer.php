@@ -37,9 +37,9 @@ class UserTransformer extends TransformerAbstract
         return [
             'id' => $user->id,
             'email' => $user->email,
-            'nombre' => $user->name,
-            'apellido' => $user->last_name,
-            'estado' => $user->stado,
+            'name' => $user->name,
+            'last_name' => $user->last_name,
+            'status' => $user->stado,
             'creado' => $this->format_date($user->created_at),
             'actualizado' => $this->format_date($user->updated_at),
             'links' => [
@@ -55,10 +55,10 @@ class UserTransformer extends TransformerAbstract
     public static function transformRequest($index)
     {
         $attribute = [
-            'correo' => 'email',
-            'nombre' => 'name',
-            'apellido' => 'last_name',
-            'estado' => 'status',
+            'email' => 'email',
+            'name' => 'name',
+            'last_name' => 'last_name',
+            'status' => 'status',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -67,10 +67,10 @@ class UserTransformer extends TransformerAbstract
     public static function transformResponse($index)
     {
         $attribute = [
-            'email' => 'correo',
-            'name' => 'nombre',
-            'last_name' => 'apellido',
-            'status' => 'estado',
+            'email' => 'email',
+            'name' => 'name',
+            'last_name' => 'last_name',
+            'status' => 'status',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -80,10 +80,10 @@ class UserTransformer extends TransformerAbstract
     {
         $attributes = [
             'id' => 'id',
-            'correo' => 'email',
-            'nombre' => 'name',
-            'apellido' => 'last_name',
-            'estado' => 'status',
+            'email' => 'email',
+            'name' => 'name',
+            'last_name' => 'last_name',
+            'status' => 'status',
             'creado' => 'created_at',
             'actualizado' => 'updated_at',
         ];

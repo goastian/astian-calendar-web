@@ -49,16 +49,16 @@ class CalendarController extends Controller
         $this->validate($request, [
             'title' => ['required', 'max:100'],
             'body' => ['required', 'max:1000'],
+            'start' => ['required', 'date_format:Y-m-d H:i'],
+            'end' => ['required', 'date_format:Y-m-d H:i'],
             'meeting' => ['required', 'date_format:Y-m-d H:i'],
             'resource' => ['nullable', 'url:https'],
-            //'banner' => ['nullable', 'file', 'image', 'mimes:jpg,png,svg'],
             'public' => ['nullable', 'boolean'],
         ]);
 
         DB::transaction(function () use ($request, $calendar) {
             $calendar = $calendar->fill($request->except('body'));
             $calendar->body = Purify::clean($request->body);
-            //$calendar->banner = $request->banner ? Storage::disk('banners')->put('', $request->banner) : null;
             $calendar->user_id = $this->user()->id;
             $calendar->save();
         });
@@ -97,8 +97,9 @@ class CalendarController extends Controller
         $this->validate($request, [
             'title' => ['nullable', 'max:100'],
             'body' => ['nullable', 'max:1000'],
+            'start' => ['nullable', 'date_format:Y-m-d H:i'],
+            'end' => ['nullable', 'date_format:Y-m-d H:i'],
             'resource' => ['nullable', 'url:https'],
-            //'banner' => ['nullable', 'file', 'image', 'mimes:jpg,png,svg'],
             'meeting' => ['nullable', 'date_format:Y-m-d H:i'],
             'public' => ['nullable', 'boolean'],
         ]);
@@ -122,11 +123,15 @@ class CalendarController extends Controller
                 $changed = true;
             }
 
-            /* if ($request->banner) {
-            Storage::disk('banners')->delete($calendar->banner);
-            $calendar->resource = Storage::disk('banners')->put('', $request->banner);
-            $changed = true;
-            }*/
+            if ($this->is_diferent($calendar->start, $request->start)) {
+                $calendar->start = $request->start;
+                $changed = true;
+            }
+
+            if ($this->is_diferent($calendar->end, $request->end)) {
+                $calendar->end = $request->end;
+                $changed = true;
+            }
 
             if ($this->is_diferent($calendar->meeting, $request->meeting)) {
                 $calendar->meeting = $request->meeting;
