@@ -40,7 +40,7 @@ const register = ref(process.env.MIX_HOME_REGISTER);
 <style lang="scss" scoped>
 .main {
     text-align: center;
-    height: 82vh;
+    min-height: 82vh;
     padding-top: 10vh;
 }
 
