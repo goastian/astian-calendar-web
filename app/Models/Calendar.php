@@ -19,7 +19,8 @@ class Calendar extends Master
         'title',
         'body',
         'resource',
-        'meeting',
+        'start',
+        'end',
         'public',
         'user_id',
     ];
