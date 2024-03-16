@@ -42,10 +42,9 @@ class CalendarTransformer extends TransformerAbstract
             'start' => $calendar->start,
             'end' => $calendar->end,
             'link' => $calendar->resource,
-            'meeting' => $calendar->meeting,
             'public' => $calendar->public,
-            'creado' => $this->format_date($calendar->created_at),
-            'actualizado' => $this->format_date($calendar->created_at),
+            'created' => $this->format_date($calendar->created_at),
+            'updated' => $this->format_date($calendar->created_at),
             'links' => [
                 'parent' => route('calendars.index'),
                 'store' => route('calendars.store'),
@@ -61,11 +60,10 @@ class CalendarTransformer extends TransformerAbstract
     {
         $attribute = [
             'subject' => 'title',
-            'body' => 'body',
+            'description' => 'body',
             'start' => 'start',
             'end' => 'end',
             'link' => 'resource',
-            'meeting' => 'meeting',
             'public' => 'public',
         ];
 
@@ -76,11 +74,10 @@ class CalendarTransformer extends TransformerAbstract
     {
         $attribute = [
             'title' => 'subject',
-            'body' => 'body',
+            'body' => 'description',
             'start' => 'start',
             'end' => 'end',
             'resource' => 'link',
-            'meeting' => 'meeting',
             'public' => 'public',
         ];
 
@@ -92,14 +89,13 @@ class CalendarTransformer extends TransformerAbstract
         $attributes = [
             'id' => 'id',
             'subject' => 'title',
-            'body' => 'body',
+            'description' => 'body',
             'start' => 'start',
             'end' => 'end',
             'link' => 'resource',
-            'meeting' => 'meeting',
             'public' => 'public',
-            'created_at' => 'created',
-            'updated_at' => 'updated',
+            'created' => 'created_at',
+            'updated' => 'updated_at',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

@@ -40,8 +40,8 @@ class UserTransformer extends TransformerAbstract
             'name' => $user->name,
             'last_name' => $user->last_name,
             'status' => $user->stado,
-            'creado' => $this->format_date($user->created_at),
-            'actualizado' => $this->format_date($user->updated_at),
+            'created' => $this->format_date($user->created_at),
+            'updated' => $this->format_date($user->updated_at),
             'links' => [
                 'parent' => route('calendars.users.index', ['calendar' => $user->calendar_id]),
                 'store' => route('calendars.users.store', ['calendar' => $user->calendar_id]),
@@ -84,8 +84,8 @@ class UserTransformer extends TransformerAbstract
             'name' => 'name',
             'last_name' => 'last_name',
             'status' => 'status',
-            'creado' => 'created_at',
-            'actualizado' => 'updated_at',
+            'created' => 'created_at',
+            'updated' => 'updated_at',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
