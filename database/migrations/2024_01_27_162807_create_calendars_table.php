@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('title');
             $table->dateTime('start');
             $table->dateTime('end');
-            $table->dateTime('meeting');
             $table->longText('body')->nullable();
             $table->string('resource')->nullable();
             $table->boolean('public')->default(0);
