@@ -49,9 +49,8 @@ class CalendarController extends Controller
         $this->validate($request, [
             'title' => ['required', 'max:100'],
             'body' => ['required', 'max:1000'],
-            'start' => ['required', 'date_format:Y-m-d H:i'],
-            'end' => ['required', 'date_format:Y-m-d H:i'],
-            'meeting' => ['required', 'date_format:Y-m-d H:i'],
+            'start' => ['required', 'date_format:Y-m-d H:i:s'],
+            'end' => ['required', 'date_format:Y-m-d H:i:s'],
             'resource' => ['nullable', 'url:https'],
             'public' => ['nullable', 'boolean'],
         ]);
@@ -100,7 +99,6 @@ class CalendarController extends Controller
             'start' => ['nullable', 'date_format:Y-m-d H:i'],
             'end' => ['nullable', 'date_format:Y-m-d H:i'],
             'resource' => ['nullable', 'url:https'],
-            'meeting' => ['nullable', 'date_format:Y-m-d H:i'],
             'public' => ['nullable', 'boolean'],
         ]);
 
@@ -133,11 +131,6 @@ class CalendarController extends Controller
                 $changed = true;
             }
 
-            if ($this->is_diferent($calendar->meeting, $request->meeting)) {
-                $calendar->meeting = $request->meeting;
-                $changed = true;
-            }
-
             if ($this->is_diferent($calendar->public, $request->public)) {
                 $calendar->public = $request->public;
                 $changed = true;
@@ -164,9 +157,6 @@ class CalendarController extends Controller
     {
         throw_unless($calendar->user_id == $this->user()->id,
             new ReportError(Lang::get('Unauthorize user'), 403));
-
-        Storage::disk('banners')->delete($calendar->banner);
-
         $calendar->delete();
 
         DestroyCalendarEvent::dispatch();
