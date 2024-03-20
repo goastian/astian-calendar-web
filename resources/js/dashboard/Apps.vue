@@ -11,17 +11,17 @@ const CHAT = ref(process.env.MIX_MENU_CHAT);
 
 <template>
     <button
-        type="button"
-        class="btn"
+        type="button p-0 m-0"
+        class="btn btn-sm"
         data-bs-toggle="modal"
-        data-bs-target="#staticBackdrop"
+        data-bs-target="#apps"
     >
-        <i class="bi bi-box h3"></i>
+        <i class="bi bi-box h5"></i>
     </button>
 
     <div
         class="modal fade"
-        id="staticBackdrop"
+        id="apps"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         tabindex="-1"
