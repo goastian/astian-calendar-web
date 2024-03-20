@@ -1,8 +1,10 @@
 <template>
-    <div class="content">
-        <router-view></router-view>
+    <div>
+        <div class="content">
+            <router-view></router-view>
+        </div>
+        <v-footer></v-footer>
     </div>
-    <v-footer></v-footer>
 </template>
 <script>
 import VHome from "./dashboard/Index.vue";
@@ -15,10 +17,10 @@ export default {
     },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .content {
     flex: 1;
-    margin: 0;
-    padding: 0;
+    overflow-y: scroll;
+    min-height: 100vh;
 }
 </style>

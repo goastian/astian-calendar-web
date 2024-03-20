@@ -3,6 +3,9 @@ import { router } from "./config/rutes";
 import { $server, $host } from "./config/axios";
 import * as bootstrap from "bootstrap";
 import { $echo, $channels } from "./config/echo";
+import { components } from "./config/globalComponents";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 
 import App from "./App.vue";
 
@@ -52,10 +55,12 @@ app.config.globalProperties.$channels = $channels;
 /**
  * Global Components for Vuejs
  */
-/* components.forEach((index) => {
-            app.component(index[0], index[1]);
-        });
-*/
+app.component("VDatePicker", VueDatePicker);
+
+components.forEach((index) => {
+    app.component(index[0], index[1]);
+});
+
 /**
  * Routes from vueRoute
  */

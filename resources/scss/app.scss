@@ -1,5 +1,6 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons';
+@import "../../node_modules/vue-pro-calendar/dist/style.css";
 
 :root {
     --theme: #e3eeedec;
@@ -36,11 +37,11 @@
     --apps-menu-bg: #fff;
     --apps-menu-color: #524949;
     --apps-shadow-color: #8f6868;
-    --calendar-bg: #8d8dd6;
+    --calendar-bg: #9797b6;
     --calendar-color: #faf7f7;
     --calendar-hover-color: #c7d0d1;
-    --calendar-hover-bg: #0e0e0e;
-    --calendar-border-color: #f8fbfc;
+    --calendar-day-bg: #3ec2bb;
+    --calendar-day-color: #fff;
 }
 
 html,
@@ -191,4 +192,24 @@ body {
     color: var(--nav-top-color);
     padding: 0%;
     margin: 0%;
+}
+
+.btn-primary {
+    background-color: var(--primary) !important;
+    color: var(--white) !important;
+    border: none !important;
+}
+
+.btn-success {
+    background-color: var(--ternary) !important;
+    color: var(--white) !important;
+    border: none !important;
+}
+
+.line-through {
+    text-decoration: line-through;
+}
+
+.hide {
+    display: none !important;
 }
