@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Master extends Model
 {
-    use HasUuids,Timestamps, HasFactory, Asset; 
+    use HasUuids, HasFactory, Asset; 
 
     /**
      * The data type of the auto-incrementing ID.
