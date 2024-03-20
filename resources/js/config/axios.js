@@ -11,6 +11,7 @@ export const $server = axios.create({
     headers: {
         Accept: "application/json",
         Authorization: "Bearer " + Cookies.get(process.env.MIX_ECHO_TOKEN),
+        "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
 });
 
@@ -24,5 +25,6 @@ export const $host = axios.create({
     headers: {
         Accept: "application/json",
         Authorization: "Bearer " + Cookies.get(process.env.MIX_ECHO_TOKEN),
+        "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
 });
