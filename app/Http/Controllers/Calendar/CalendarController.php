@@ -49,14 +49,15 @@ class CalendarController extends Controller
         $this->validate($request, [
             'title' => ['required', 'max:100'],
             'body' => ['required', 'max:1000'],
-            'start' => ['required', 'date_format:Y-m-d H:i:s'],
-            'end' => ['required', 'date_format:Y-m-d H:i:s'],
+            'start' => ['required', 'date_format:Y-m-d H:i', 'after:' . now()],
+            'end' => ['required', 'date_format:Y-m-d H:i', 'after:start'],
             'resource' => ['nullable', 'url:https'],
             'public' => ['nullable', 'boolean'],
         ]);
 
         DB::transaction(function () use ($request, $calendar) {
-            $calendar = $calendar->fill($request->except('body'));
+            $calendar = $calendar->fill($request->except('body', 'public'));
+            $calendar->public = $request->public ? true : false;
             $calendar->body = Purify::clean($request->body);
             $calendar->user_id = $this->user()->id;
             $calendar->save();
@@ -96,8 +97,8 @@ class CalendarController extends Controller
         $this->validate($request, [
             'title' => ['nullable', 'max:100'],
             'body' => ['nullable', 'max:1000'],
-            'start' => ['nullable', 'date_format:Y-m-d H:i'],
-            'end' => ['nullable', 'date_format:Y-m-d H:i'],
+            'start' => ['required', 'date_format:Y-m-d H:i', 'after:' . now()],
+            'end' => ['required', 'date_format:Y-m-d H:i', 'after:start'],
             'resource' => ['nullable', 'url:https'],
             'public' => ['nullable', 'boolean'],
         ]);
@@ -157,6 +158,7 @@ class CalendarController extends Controller
     {
         throw_unless($calendar->user_id == $this->user()->id,
             new ReportError(Lang::get('Unauthorize user'), 403));
+
         $calendar->delete();
 
         DestroyCalendarEvent::dispatch();
