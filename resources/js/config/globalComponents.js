@@ -1,4 +1,3 @@
+import VError from "../components/errors.vue";
 
-export const components = [
-    
-];
+export const components = [["VError", VError]];
