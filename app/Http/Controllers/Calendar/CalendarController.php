@@ -7,6 +7,7 @@ use App\Events\StoreCalendarEvent;
 use App\Events\UpdateCalendarEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Calendar;
+use App\Rules\AfterTimeRule;
 use App\Transformers\CalendarTransformer;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
@@ -49,7 +50,7 @@ class CalendarController extends Controller
         $this->validate($request, [
             'title' => ['required', 'max:100'],
             'body' => ['required', 'max:1000'],
-            'start' => ['required', 'date_format:Y-m-d H:i', 'after:' . now()],
+            'start' => ['required', 'date_format:Y-m-d H:i', new AfterTimeRule(now())],
             'end' => ['required', 'date_format:Y-m-d H:i', 'after:start'],
             'resource' => ['nullable', 'url:https'],
             'public' => ['nullable', 'boolean'],
@@ -97,7 +98,7 @@ class CalendarController extends Controller
         $this->validate($request, [
             'title' => ['nullable', 'max:100'],
             'body' => ['nullable', 'max:1000'],
-            'start' => ['required', 'date_format:Y-m-d H:i', 'after:' . now()],
+            'start' => ['required', 'date_format:Y-m-d H:i', new AfterTimeRule(now())],
             'end' => ['required', 'date_format:Y-m-d H:i', 'after:start'],
             'resource' => ['nullable', 'url:https'],
             'public' => ['nullable', 'boolean'],
