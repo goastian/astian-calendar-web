@@ -16,33 +16,32 @@ router.beforeEach((to, from, next) => {
     /**
      * checking for valid credentials
      */
-     
-    if (to.meta.auth) {
-        $server
-            .get("/api/gateway/check-authentication")
-            .then((res) => {
+    $server
+        .get("/api/gateway/check-authentication")
+        .then((res) => {
+            /**
+             * Checking if the route is auth
+             */
+            if (to.meta.auth) {
+                next();
+            } else if (!to.meta.auth && to.name == "login") {
                 /**
-                 * Checking if the route is auth
+                 * Ckecking the user is auth and the route is
+                 * login we're redirect to the user to calendar route
                  */
-                if (to.meta.auth) {
-                    next();
-                } else if (!to.meta.auth && to.name == "login") {
-                    /**
-                     * Ckecking the user is auth and the route is
-                     * login we're redirect to the user to calendar route
-                     */
-                    return next({ name: "calendar" });
-                }
-            })
-            .catch((err) => {
-                /**
-                 * Has a not valid crdential redirect to le login
-                 */
+                return next({ name: "calendar" });
+            }
+        })
+        .catch((err) => {
+            /**
+             * Has a not valid crdential redirect to le login
+             */
+            if (to.meta.auth) { //redirect to the login if the route is auth
                 next({ name: "login" });
-            });
-    } else {
-        next();
-    }
+            } else {
+                next();
+            }
+        });
 });
 /**
  * creating Vue App
