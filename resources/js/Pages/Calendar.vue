@@ -8,13 +8,19 @@
             <div class="today mt-2">
                 <p class="text-color bolder p-0 m-0">Today</p>
 
-                <slot name="today" :item="filterEvents(current_date)"></slot>
+                <slot
+                    name="today"
+                    :item="filterEvents(current_date, false)"
+                ></slot>
             </div>
 
             <div class="tomorrow">
                 <p class="text-color bolder p-0 m-0">Tomorrow</p>
 
-                <slot name="tomorrow" :item="filterEvents(next_date)"></slot>
+                <slot
+                    name="tomorrow"
+                    :item="filterEvents(next_date, false)"
+                ></slot>
             </div>
         </div>
         <div class="box">
@@ -64,7 +70,7 @@
                     <p>
                         <span
                             v-if="item.day"
-                            style="cursor: pointer" 
+                            style="cursor: pointer"
                             class="align-middle"
                             :class="{ icon: current_date == item.time }"
                             @click="setEventByDay(item.time)"
@@ -138,43 +144,75 @@ export default {
     },
 
     computed: {
+        /**
+         * get current year
+         */
         getCurrentYear() {
             return this.current_year;
         },
 
+        /**
+         * get current month
+         */
         getCurrentMonth() {
             this.setDaysOfMonth();
             this.setDaysOfPreviousMonth();
-            //  this.setDaysOfNextMonth();
             return this.current_month;
         },
     },
 
     methods: {
         /**
-         * Search events
+         * Search data in array
+         * @param {*} time
+         * @param {*} deleted
          */
-        filterEvents(time) {
+        filterEvents(time, deleted = true) {
             const result = [];
 
-            this.$props.events.forEach((element) => {
-                element.start.match(new RegExp(time, "g"))
-                    ? result.push(element)
-                    : null;
-            });
+            if (deleted) {
+                try {
+                    this.$props.events.forEach((element) => {
+                        element.start.match(new RegExp(time, "g"))
+                            ? result.push(element)
+                            : null;
+                    });
 
-            return result;
+                    return result;
+                } catch (TypeError) {}
+            }
+
+            try {
+                this.$props.events.forEach((element) => {
+                    element.start.match(new RegExp(time, "g")) &&
+                    !element.deleted
+                        ? result.push(element)
+                        : null;
+                });
+
+                return result;
+            } catch (error) {}
         },
 
+        /**
+         * Set all events by day
+         * @param {*} time
+         */
         setEventByDay(time) {
             this.filter_events_by_day = [];
-            this.filter_events_by_day = this.filterEvents(time);
+            this.filter_events_by_day = this.filterEvents(time, false);
         },
 
+        /**
+         * Get all events by day
+         */
         getEventsByDay() {
             return this.filter_events_by_day;
         },
 
+        /**
+         * Set the current date
+         */
         setCurrentDate() {
             const date = new Date();
 
@@ -312,9 +350,6 @@ export default {
         /**
          * Get the last days from the previous month
          */
-        /**
-         * Get the last days from the previous month
-         */
         setDaysOfPreviousMonth() {
             const month = [];
 
@@ -326,7 +361,7 @@ export default {
 
             for (
                 let i = current - (this.getFirstDayOfMonth().index - 1);
-                i <= current;
+                i < current + 42 - (this.getFirstDayOfMonth().index - 1);
                 i++
             ) {
                 const date = new Date(
@@ -335,44 +370,26 @@ export default {
                     i
                 );
 
+                const year = date.getFullYear();
+                const mnth =
+                    date.getMonth() + 1 < 10
+                        ? `0${date.getMonth() + 1}`
+                        : date.getMonth() + 1;
+                const day =
+                    date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+
                 month.unshift({
-                    day: null, //date.getDate(),
-                    name: null, //this.days_name[date.getDay()],
-                    index: null, //date.getDay(),
-                    month_name: null, //this.month_name[date.getMonth()],
-                });
-            }
-
-            month.forEach((element) => {
-                this.days_of_month.unshift(element);
-            });
-        },
-
-        /**
-         * Get the first days from the next month
-         */
-        setDaysOfNextMonth() {
-            const month = [];
-
-            const current = new Date(
-                this.current_year,
-                this.current_month + 1,
-                0
-            ).getDate();
-            for (
-                let i = current + 1;
-                i <= current + (this.getLastDayOfMonth().index - 7);
-                i++
-            ) {
-                const date = new Date(this.current_year, this.current_month, i);
-
-                this.days_of_month.push({
                     day: date.getDate(),
                     name: this.days_name[date.getDay()],
                     index: date.getDay(),
                     month_name: this.month_name[date.getMonth()],
+                    time: `${year}-${mnth}-${day}`,
                 });
             }
+            this.days_of_month = [];
+            month.forEach((element) => {
+                this.days_of_month.unshift(element);
+            });
         },
     },
 };
