@@ -1,13 +1,11 @@
 <template>
-    <ul class="nav">
+    <ul class="nav pt-2">
         <li class="nav-item" @click="Expand(status)">
             <a href="#" class="btn">
-                <span class="mx-2">
+                <span class="text-color">
                     {{ app_name }}
                 </span>
-
-                <i class="bi bi-list h5"></i
-            ></a>
+            </a>
         </li>
         <li class="nav-item ms-auto">
             <v-apps></v-apps>
@@ -26,7 +24,7 @@
                 </span>
             </a>
             <ul class="dropdown-menu expand">
-                <li class="dropdown-item h5">
+                <li class="dropdown-item text-color">
                     <a :href="host + '/notifications/unread'">
                         Notifications
                         <span class="badge text-bg-danger">{{
@@ -36,24 +34,25 @@
                 </li>
                 <li class="dropdown-divider"></li>
                 <li
-                    class="dropdown-item p-0"
+                    class="dropdown-item"
+                    style="cursor: pointer"
                     v-for="(item, index) in unread_notifications"
                     :key="index"
                 >
                     <a
-                        :href="item.recurso"
+                        class="text-sm text-color px-1"
+                        :href="item.resource"
                         target="_blank"
                         @click="readNotification(item.links.read)"
                     >
-                        <strong class=""
-                            >{{ item.titulo }}
-                            <i
-                                :class="[
-                                    'bi h5 mx-2',
-                                    item.leido ? 'bi-eye' : 'bi-eye-slash',
-                                ]"
-                            ></i>
-                        </strong>
+                        {{ item.subject }}
+                        <i
+                            :class="{
+                                'bi h5 mx-2': true,
+                                'bi-eye': item.read,
+                                'bi-eye-slash': !item.read,
+                            }"
+                        ></i>
                     </a>
                 </li>
             </ul>
@@ -65,19 +64,19 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="true"
             >
-                {{ user.nombre }}
-                <i class="bi bi-box-arrow-in-right h4 m-0"></i>
+                {{ user.name }}
+                <i class="bi bi-box-arrow-in-right m-0"></i>
             </a>
-            <ul class="dropdown-menu expand bg-light">
+            <ul class="dropdown-menu expand">
                 <li class="dropdown-item">
-                    <a :href="host"
+                    <a class="text-color" :href="host"
                         ><i class="bi bi-house-lock mx-1"></i>
                         My Account
                     </a>
                 </li>
                 <li class="dropdown-divider"></li>
                 <li class="dropdown-item">
-                    <a @click="logout" href="#">
+                    <a class="text-color" @click="logout" href="#">
                         <i class="bi bi-lock-fill mx-1"></i>
                         Logout
                     </a>
@@ -136,7 +135,7 @@ export default {
                 })
                 .catch((err) => {
                     if (err.response && err.response.status == 401) {
-                        this.$router.push({ name: "login" });
+                        console.log(err.response.data);
                     }
                 });
         },
@@ -144,12 +143,10 @@ export default {
         logout() {
             this.$server
                 .post("api/gateway/logout")
-                .then((res) => {
-                    this.$router.push({ name: "login" });
-                })
+                .then((res) => {})
                 .catch((err) => {
-                    if (err.response && err.response.status == 401) {
-                        this.$router.push({ name: "login" });
+                    if (err.response) {
+                        console.log(err.response);
                     }
                 });
         },
@@ -162,7 +159,7 @@ export default {
                 })
                 .catch((err) => {
                     if (err.response && err.response.status == 401) {
-                        this.$router.push({ name: "login" });
+                        console.log(err.response.data);
                     }
                 });
         },
@@ -175,7 +172,7 @@ export default {
                 })
                 .catch((err) => {
                     if (err.response && err.response.status == 401) {
-                        this.$router.push({ name: "login" });
+                        console.log(err.response.data);
                     }
                 });
         },
@@ -188,7 +185,7 @@ export default {
                 })
                 .catch((err) => {
                     if (err.response && err.response.status == 401) {
-                        this.$router.push({ name: "login" });
+                        console.log(err.response.data);
                     }
                 });
         },
@@ -220,26 +217,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.nav {
-    background-color: inherit;
-    color: inherit;
-}
-
 .expand {
     padding: 5% 30% 7% 0% !important;
 }
 .dropdown-item a {
     text-decoration: none;
-    color: inherit;
+    color: var(--dark);
 }
 
 .dropdown-item a:hover {
     text-decoration: dotted !important;
-    color: var(--nav-top-hover-color) !important;
+    color: var(--primary);
 }
 
 .nav-item {
-    color: inherit;
     @media (min-width: 240px) {
         margin-top: 0%;
     }
