@@ -30,7 +30,7 @@ const register = ref(process.env.MIX_HOME_REGISTER);
         </nav>
         <main class="main">
             <p v-text="title"></p>
-            <p>somthing here</p>
+            <p>Don't forget your tasks and keep your events saved.</p>
 
             <a class="btn btn-primary btn-lg text-light" :href="login">Login</a>
         </main>
