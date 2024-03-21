@@ -108,8 +108,8 @@ class CalendarController extends Controller
 
             $changed = false;
 
-            if ($this->is_diferent($calendar->subject, $request->subject)) {
-                $calendar->subject = $request->subject;
+            if ($this->is_diferent($calendar->title, $request->title)) {
+                $calendar->title = $request->title;
                 $changed = true;
             }
 
