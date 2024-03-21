@@ -64,7 +64,7 @@
                             <div class="box">
                                 <label class="text-color">Start</label>
                                 <v-date-picker
-                                    v-model="date.start"
+                                    v-model="time.start"
                                 ></v-date-picker>
                                 <v-error :error="errors.start"></v-error>
                             </div>
@@ -72,7 +72,7 @@
                             <div class="box">
                                 <label class="text-color">End</label>
                                 <v-date-picker
-                                    v-model="date.end"
+                                    v-model="time.end"
                                 ></v-date-picker>
                                 <v-error :error="errors.end"></v-error>
                             </div>
@@ -124,7 +124,7 @@ export default {
             errors: {
                 message: null,
             },
-            date: {},
+            time: {},
             form: {
                 subject: null,
                 description: null,
@@ -171,15 +171,15 @@ export default {
             });
         },
         /**
-         *
+         * set format Y-m-d H:i
          */
         setDateFormart(time) {
             try {
-                const year = time.getUTCFullYear();
-                const month = time.getUTCMonth() + 1;
-                const day = time.getUTCDate();
-                const hours = time.getUTCHours();
-                const minutes = time.getUTCMinutes();
+                const year = time.getFullYear();
+                const month = time.getMonth() + 1;
+                const day = time.getDate();
+                const hours = time.getHours();
+                const minutes = time.getMinutes();
 
                 // Format the components into the desired format
                 const formattedDate = `${year}-${
@@ -192,14 +192,18 @@ export default {
             } catch (TypeError) {}
         },
 
+        /**
+         *  save data in the bd
+         * @param {*} $event 
+         */
         save($event) {
             this.button = $event.target;
             this.button.disabled = true;
 
             this.form.description = this.quill.root.innerHTML;
 
-            this.form.start = this.setDateFormart(this.date.start);
-            this.form.end = this.setDateFormart(this.date.end);
+            this.form.start = this.setDateFormart(this.time.start);
+            this.form.end = this.setDateFormart(this.time.end);
 
             this.$host
                 .post("/api/calendars", this.form)
@@ -207,7 +211,7 @@ export default {
                     this.button.disabled = false;
                     this.errors = {};
                     this.form = {};
-                    this.date = {};
+                    this.time = {};
                     this.quill.root.innerHTML = "";
                     this.$emit("storeEvent", res.data.data);
                 })
