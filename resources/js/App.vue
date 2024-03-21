@@ -21,6 +21,6 @@ export default {
 .content {
     flex: 1;
     overflow-y: scroll;
-    min-height: 100vh;
+    min-height: 92vh;
 }
 </style>
