@@ -47,10 +47,10 @@
                         ><i class="bi bi-arrow-right h4"></i
                     ></span>
                 </div>
-                <div class="mode">
+                <!-- <div class="mode">
                     <span><i class="bi bi-grid h3"></i></span>
                     <span><i class="bi bi-list-check h3"></i></span>
-                </div>
+                </div>-->
             </div>
             <div class="days-of-week">
                 <div
@@ -396,20 +396,31 @@ export default {
 </script>
 <style lang="scss" scoped>
 .calendar {
-    display: flex;
     width: 100%;
+
+    @media (min-width: 940px) {
+        display: flex;
+    }
 }
 
 .box:first-child {
-    width: 30%;
-    min-height: 100vh;
-    padding: 1%;
-    overflow-y: scroll;
+    width: 100%;
+    padding: 2%;
+
+    @media (min-width: 940px) {
+        width: 30%;
+        padding: 1%;
+        min-height: 100vh;
+        overflow-y: scroll;
+    }
 }
 
 .box:last-child {
-    width: 70%;
-    padding: 1%;
+    width: 100%;
+    @media (min-width: 940px) {
+        width: 70%;
+        padding: 1%;
+    }
 }
 
 .days-of-week {
@@ -438,7 +449,7 @@ export default {
 }
 
 .head div {
-    width: calc(100% / 3);
+    width: calc(100% / 2);
     text-align: center;
 }
 
@@ -461,11 +472,26 @@ export default {
 }
 
 .week {
+    border-left: 1px solid var(--primary);
     border-bottom: 1px solid var(--primary);
+    border-top: 1px solid var(--primary);
+    overflow: hidden;
+    font-size: 9px;
+    @media (min-width: 940px) {
+        font-size: 12px;
+
+        overflow: visible;
+    }
 }
+
 .day {
     border-bottom: 1px solid var(--primary);
     border-left: 1px solid var(--primary);
     padding: 1%;
+}
+
+.details {
+    width: 100%;
+    padding-left: 2%;
 }
 </style>

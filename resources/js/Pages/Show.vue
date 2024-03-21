@@ -95,7 +95,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div class="text-justify">
                             <div
                                 style="min-height: 20vh"
                                 :id="
@@ -161,23 +161,18 @@ export default {
          * Load editor
          */
         loadEditor() {
-            const toolbar = [
-                [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+            const toolbarOptions = [
                 [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                ["bold", "italic", "underline", "strike"], // toggled buttons
+                ["bold", "italic", "underline", "strike", "link"], // toggled buttons
                 ["blockquote", "code-block"],
-                ["link", "formula"],
 
                 [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-                [{ script: "sub" }, { script: "super" }], // superscript/subscript
-                [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-                [{ direction: "rtl" }], // text direction
 
                 [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-                [{ font: [] }],
+
                 [{ align: [] }],
 
-                ["clean"], // remove formatting button
+                ["clean"],
             ];
 
             this.quill = new Quill(
@@ -185,7 +180,7 @@ export default {
                 {
                     placeholder: "Add description for this task",
                     modules: {
-                        toolbar: toolbar,
+                        toolbar: toolbarOptions,
                     },
                     theme: "snow",
                 }
@@ -249,7 +244,12 @@ export default {
 }
 
 .box {
-    flex: 1 1 45%;
+    flex: 1 1 100%;
     margin: 1%;
+
+    @media (min-width: 800px) {
+        flex: 1 1 45%;
+        margin: 1%;
+    }
 }
 </style>

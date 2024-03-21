@@ -144,19 +144,14 @@ export default {
     methods: {
         loadEditor() {
             const toolbarOptions = [
-                [{ size: ["small", false, "large", "huge"] }], // custom dropdown
                 [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                ["bold", "italic", "underline", "strike"], // toggled buttons
+                ["bold", "italic", "underline", "strike", "link"], // toggled buttons
                 ["blockquote", "code-block"],
-                ["link", "formula"],
 
                 [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
-                [{ script: "sub" }, { script: "super" }], // superscript/subscript
-                [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-                [{ direction: "rtl" }], // text direction
 
                 [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-                [{ font: [] }],
+
                 [{ align: [] }],
 
                 ["clean"], // remove formatting button
@@ -194,7 +189,7 @@ export default {
 
         /**
          *  save data in the bd
-         * @param {*} $event 
+         * @param {*} $event
          */
         save($event) {
             this.button = $event.target;
@@ -237,8 +232,13 @@ export default {
 }
 
 .box {
-    flex: 1 1 45%;
+    flex: 1 1 100%;
     margin: 1%;
+
+    @media (min-width: 800px) {
+        flex: 1 1 45%;
+        margin: 1%;
+    }
 }
 
 #create-task {
