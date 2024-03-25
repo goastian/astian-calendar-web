@@ -2,10 +2,14 @@
     <ul class="nav pt-2">
         <li class="nav-item" @click="Expand(status)">
             <a href="#" class="btn">
-                <span class="text-color">
+                <span class="text-light">
                     {{ app_name }}
                 </span>
             </a>
+            <i
+                class="bi bi-list h5 mx-1 text-light"
+                style="cursor: pointer"
+            ></i>
         </li>
         <li class="nav-item ms-auto">
             <v-apps></v-apps>
@@ -13,7 +17,7 @@
 
         <li class="nav-item dropdown">
             <a
-                class="btn dropdown-toggle"
+                class="btn dropdown-toggle text-light"
                 data-bs-toggle="dropdown"
                 aria-expanded="true"
             >
@@ -60,7 +64,7 @@
 
         <li class="nav-item dropdown icon">
             <a
-                class="btn dropdown-toggle"
+                class="btn dropdown-toggle text-light"
                 data-bs-toggle="dropdown"
                 aria-expanded="true"
             >
@@ -133,22 +137,14 @@ export default {
                     this.notification();
                     this.unreadNotification();
                 })
-                .catch((err) => {
-                    if (err.response && err.response.status == 401) {
-                        console.log(err.response.data);
-                    }
-                });
+                .catch((err) => {});
         },
 
         logout() {
             this.$server
                 .post("api/gateway/logout")
                 .then((res) => {})
-                .catch((err) => {
-                    if (err.response) {
-                        console.log(err.response);
-                    }
-                });
+                .catch((err) => {});
         },
 
         notification() {
@@ -157,11 +153,7 @@ export default {
                 .then((res) => {
                     this.notifications = res.data.data;
                 })
-                .catch((err) => {
-                    if (err.response && err.response.status == 401) {
-                        console.log(err.response.data);
-                    }
-                });
+                .catch((err) => {});
         },
 
         unreadNotification() {
@@ -170,11 +162,7 @@ export default {
                 .then((res) => {
                     this.unread_notifications = res.data.data;
                 })
-                .catch((err) => {
-                    if (err.response && err.response.status == 401) {
-                        console.log(err.response.data);
-                    }
-                });
+                .catch((err) => {});
         },
 
         readNotification(link) {
@@ -183,11 +171,7 @@ export default {
                 .then((res) => {
                     this.notification();
                 })
-                .catch((err) => {
-                    if (err.response && err.response.status == 401) {
-                        console.log(err.response.data);
-                    }
-                });
+                .catch((err) => {});
         },
 
         listenEvents() {
@@ -217,6 +201,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.nav {
+    background-color: var(--nav-top-bg) !important;
+    color: var(--nav-top-color) !important;
+}
 .expand {
     padding: 5% 30% 7% 0% !important;
 }

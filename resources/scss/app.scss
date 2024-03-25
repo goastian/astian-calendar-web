@@ -8,6 +8,7 @@
     --ternary: #8dc73f;
     --quaternary: #bd1c7c;
     --white: #f6f9fd;
+    --code: #091226b5;
     --first-color: #091226b5;
     --second-color: #281cb0;
     --third-color: #828282;
@@ -79,7 +80,7 @@ body {
 }
 
 .text-color {
-    color: var(--first-color) !important
+    color: var(--code) !important
 }
 
 .text-title {

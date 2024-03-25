@@ -11,8 +11,8 @@ const CHAT = ref(process.env.MIX_MENU_CHAT);
 
 <template>
     <button
-        type="button p-0 m-0"
-        class="btn btn-sm"
+        type="button"
+        class="btn btn-sm text-light"
         data-bs-toggle="modal"
         data-bs-target="#apps"
     >
