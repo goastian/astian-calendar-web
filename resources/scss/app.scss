@@ -23,8 +23,8 @@
     --footer-bg: #5cb659;
     --footer-color: #fff;
     --footer-hover: #3ee7cb;
-    --nav-top-bg: #569ca4;
-    --nav-top-color: #f0e9e9;
+    --nav-top-bg: #0cb2c4;
+    --nav-top-color: #b7b6b6;
     --nav-top-hover-color: #51699c;
     --nav-left-bg: #312e2e;
     --nav-left-color: #222121;
@@ -213,6 +213,59 @@ body {
     display: none !important;
 }
 
-.ql-toolbar.ql-snow { 
+.ql-toolbar.ql-snow {
     text-align: justify !important;
+}
+
+
+.btn-primary,
+.bg-primary {
+    background-color: var(--primary) !important;
+    border: var(--primary);
+    color: var(--white);
+}
+
+.btn-secondary,
+.bg-secondary {
+    background-color: var(--secondary) !important;
+    border: var(--secondary);
+    color: var(--white);
+}
+
+.btn-ternary,
+.bg-ternary {
+    background-color: var(--ternary) !important;
+    border: var(--ternary);
+    color: var(--code);
+}
+
+.btn-quaternary,
+.bg-quaternary {
+    background-color: var(--quaternary) !important;
+    border: var(--quaternary);
+    color: var(--white);
+}
+
+.bg-light {
+    background-color: var(--white) !important;
+    color: var(--dark) !important;
+}
+
+.text-color {
+    color: var(--code) !important
+}
+
+.router-link-active.router-link-exact-active {
+    color: #10102d !important;
+    font-weight: bold;
+}
+
+.astian-primary {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.astian-ligth {
+    background-color: var(--white);
+    color: var(--dark);
 }
