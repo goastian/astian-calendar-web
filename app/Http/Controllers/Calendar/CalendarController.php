@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Calendar;
 
-use App\Events\DestroyCalendarEvent;
-use App\Events\StoreCalendarEvent;
-use App\Events\UpdateCalendarEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Calendar;
 use App\Rules\AfterTimeRule;
@@ -62,9 +59,9 @@ class CalendarController extends Controller
             $calendar->body = Purify::clean($request->body);
             $calendar->user_id = $this->user()->id;
             $calendar->save();
-        });
 
-        StoreCalendarEvent::dispatch();
+            $this->publicChannel("StoreCalendarEvent", "New event on calendar");
+        });
 
         return $this->showOne($calendar, $calendar->transformer, 201);
     }
@@ -140,8 +137,7 @@ class CalendarController extends Controller
 
             if ($changed) {
 
-                UpdateCalendarEvent::dispatch();
-
+                $this->publicChannel("UpdateCalendarEvent", "Event on calendar updated");
                 $calendar->push();
             }
         });
@@ -162,7 +158,7 @@ class CalendarController extends Controller
 
         $calendar->delete();
 
-        DestroyCalendarEvent::dispatch();
+        $this->publicChannel("DestroyCalendarEvent", "Event on calendar deleted");
 
         return $this->showOne($calendar, $calendar->transformer);
     }

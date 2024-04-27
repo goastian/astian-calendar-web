@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Calendar;
 
-use App\Events\DestroyUserEvent;
-use App\Events\StoreUserEvent;
-use App\Events\UpdateUserEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Calendar;
 use App\Models\User;
@@ -68,13 +65,13 @@ class CalendarUserController extends Controller
         DB::transaction(function () use ($request, $calendar, $user) {
             $user = $user->fill($request->only('email', 'name', 'last_name'));
             $user->calendar_id = $calendar->id;
-            $user->token = Str::random(100); 
+            $user->token = Str::random(100);
             $user->code = Hash::make($code = $this->generateUniqueCode());
             $user->save();
 
             Notification::send($user, new ShareCalendar($code, $calendar));
 
-            StoreUserEvent::dispatch();
+            $this->publicChannel("StoreUserEvent", "New user added");
         });
 
         return $this->showOne($user, UserTransformer::class, 201);
@@ -132,9 +129,10 @@ class CalendarUserController extends Controller
             }
 
             if ($changed) {
-                UpdateUserEvent::dispatch();
 
-                $user->save();
+                $user->push();
+
+                $this->publicChannel("UpdateUserEvent", "User updated");
             }
 
         });
@@ -153,7 +151,7 @@ class CalendarUserController extends Controller
 
         $user->delete();
 
-        DestroyUserEvent::dispatch();
+        $this->publicChannel("DestroyUserEvent", "User removed from calendar");
 
         return $this->showOne($user, UserTransformer::class);
     }
