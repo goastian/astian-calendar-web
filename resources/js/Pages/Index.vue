@@ -160,9 +160,7 @@ export default {
                     .then((res) => {
                         this.getEvents();
                     })
-                    .catch((err) => {
-                        console.log(err.response);
-                    });
+                    .catch((err) => {});
             }
         },
 
@@ -183,21 +181,18 @@ export default {
             this.$echo
                 .channel(this.$channels.ch_0())
                 .listen("StoreCalendarEvent", (res) => {
-                    console.log(res);
                     this.getEvents();
                 });
 
             this.$echo
                 .channel(this.$channels.ch_0())
                 .listen("UpdateCalendarEvent", (res) => {
-                    console.log(res);
                     this.getEvents();
                 });
 
             this.$echo
                 .channel(this.$channels.ch_0())
                 .listen("DestroyCalendarEvent", (res) => {
-                    console.log(res);
                     this.getEvents();
                 });
         },
